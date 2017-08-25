@@ -45,11 +45,11 @@ def auth_user():
             result = utente_schema.dump(utente)
             return jsonify(result.data)
         else:
-            utente = Utente('','',username,'')
-            result = utente_schema.dump(utente)
+            wrongp = Utente('','',username,'')
+            result = utente_schema.dump(wrongp)
             return jsonify(result.data)
-    rutente = Utente('','','','')
-    result = utente_schema.dump(utente)
+    wrongu = Utente('','','','')
+    result = utente_schema.dump(wrongu)
     return jsonify(result.data)
 
 
