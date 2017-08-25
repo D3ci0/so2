@@ -46,10 +46,10 @@ def auth_user():
             return jsonify(result.data)
         else:
             wrongp = jsonify('Wrong password')
-            wrongp.status_code = 404
+            wrongp.status_code = 434
             return wrongp
     wrongu = jsonify('Wrong username')
-    wrongu.status_code = 404
+    wrongu.status_code = 434
     return wrongu
 
 
