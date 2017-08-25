@@ -29,8 +29,7 @@ def save_reg():
     registrazione.pos = WKTElement(registrazione.pos, 4326)
     db.session.add(registrazione)
     db.session.commit()
-    response = jsonify({'Registration successfully saved'})
-    response.status_code = 200
+    response = jsonify({'message':'Registration successfully saved'})
     return response
 
 @app.route('/auth_user', methods = ['GET','POST'])
