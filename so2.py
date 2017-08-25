@@ -19,7 +19,7 @@ def get_reg_by_user():
     idutente = request.get_json()
     print(idutente)
     registrazione = Registrazione.query.filter_by(idutente = idutente)
-    result = registrazione_schema.dump(registrazione)
+    result = registrazioni_schema.dump(registrazione)
     return jsonify(result.data)
 
 @app.route('/save_reg', methods = ['POST'])
