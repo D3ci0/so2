@@ -6,20 +6,20 @@ from geoalchemy2 import *
 def get_all_users():
     utenti = Utente.query.all()
     result = utenti_schema.dump(utenti)
-    return jsonify({'utenti': result.data})
+    return jsonify( result.data)
 
 @app.route('/registrations', methods = ['GET'])
 def get_all_registrations():
     registrazioni = Registrazione.query.all()
     result = registrazioni_schema.dump(registrazioni)
-    return jsonify({'registrazioni' : result.data})
+    return jsonify(result.data)
 
 @app.route('/reg_by_user', methods = ['GET','POST'])
 def get_reg_by_user():
     idutente = request.get_json()
     registrazione = Registrazione.query.filter_by(idutente = idutente).first()
     result = registrazione_schema.dump(registrazione)
-    return jsonify({'registrazione' : result.data})
+    return jsonify(result.data)
 
 @app.route('/save_reg', methods = ['POST'])
 def save_reg():
@@ -28,7 +28,7 @@ def save_reg():
     registrazione.pos = WKTElement(registrazione.pos, 4326)
     db.session.add(registrazione)
     db.session.commit()
-    response = jsonify({'message' : 'Registration successfully saved'})
+    response = jsonify({'Registration successfully saved'})
     response.status_code = 200
     return response
 
@@ -44,9 +44,11 @@ def auth_user():
             result = utente_schema.dump(utente)
             return jsonify(result.data)
         else:
-            wrongp = jsonify({'message' : 'Wrong password'})
+            wrongp = jsonify({'Wrong password'})
+            wrongp.status_code = 404
             return wrongp
-    wrongu = jsonify({'message' : 'Wrong username'})
+    wrongu = jsonify({'Wrong username'})
+    wrongu.status_code = 404
     return wrongu
 
 
