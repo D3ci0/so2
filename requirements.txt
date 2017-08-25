@@ -2,3 +2,6 @@ Flask==0.12.2
 gunicorn==19.7.1
 SQLAlchemy==1.1.13
 Flask-SQLAlchemy==2.1
+GeoAlchemy2==0.4.0
+Shapely==1.5.17
+marshmallow==2.13.6
