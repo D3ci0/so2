@@ -17,7 +17,8 @@ def get_all_registrations():
 @app.route('/reg_by_user', methods = ['GET','POST'])
 def get_reg_by_user():
     idutente = request.get_json()
-    registrazione = Registrazione.query.filter_by(idutente = idutente).first()
+    print(idutente)
+    registrazione = Registrazione.query.filter_by(idutente = idutente)
     result = registrazione_schema.dump(registrazione)
     return jsonify(result.data)
 
