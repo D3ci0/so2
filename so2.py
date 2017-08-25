@@ -45,10 +45,10 @@ def auth_user():
             result = utente_schema.dump(utente)
             return jsonify(result.data)
         else:
-            wrongp = jsonify('Wrong password')
-            return wrongp
-    wrongu = jsonify('Wrong username')
-    return wrongu
+            result = Utente('','',username,'')
+            return jsonify(result.data)
+    result = Utente('','','','')
+    return jsonify(result.data)
 
 
 
