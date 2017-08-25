@@ -1,1 +1,1 @@
-web: gunicorn so2 --log-file -
+web: gunicorn app:so2 --log-file -
