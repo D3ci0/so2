@@ -20,6 +20,7 @@ def get_reg_by_user():
     print(idutente)
     registrazione = Registrazione.query.filter_by(idutente = idutente)
     result = registrazioni_schema.dump(registrazione)
+    #gestire quando ci sono una o più entry
     return jsonify(result.data)
 
 @app.route('/save_reg', methods = ['POST'])
@@ -44,9 +45,11 @@ def auth_user():
             result = utente_schema.dump(utente)
             return jsonify(result.data)
         else:
-            result = Utente('','',username,'')
+            utente = Utente('','',username,'')
+            result = utente_schema.dump(utente)
             return jsonify(result.data)
-    result = Utente('','','','')
+    rutente = Utente('','','','')
+    result = utente_schema.dump(utente)
     return jsonify(result.data)
 
 
