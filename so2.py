@@ -45,10 +45,10 @@ def auth_user():
             result = utente_schema.dump(utente)
             return jsonify(result.data)
         else:
-            wrongp = jsonify({'Wrong password'})
+            wrongp = jsonify('Wrong password')
             wrongp.status_code = 404
             return wrongp
-    wrongu = jsonify({'Wrong username'})
+    wrongu = jsonify('Wrong username')
     wrongu.status_code = 404
     return wrongu
 
