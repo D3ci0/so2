@@ -42,7 +42,7 @@ def auth_user():
     if utente :
         if password == utente.password :
             result = utente_schema.dump(utente)
-            return jsonify(result)
+            return jsonify(result.data)
         else:
             wrongp = jsonify({'message' : 'Wrong password'})
             return wrongp
