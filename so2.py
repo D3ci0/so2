@@ -22,7 +22,6 @@ def get_reg_by_user():
         result = registrazioni_schema.dump(registrazione)
     else :
         result = registrazione_schema.dump(registrazione)
-    #gestire quando ci sono una o più entry
     return jsonify(result.data)
 
 @app.route('/save_reg', methods = ['POST'])
@@ -53,6 +52,26 @@ def auth_user():
     result = utente_schema.dump(wrongu)
     return jsonify(result.data)
 
+@app.route('/search_reg', methods = ['GET','POST'])
+def search_reg():
+    json = request.get_json()
+    print(json)
+    wkbpos = json['pos']
+    range = json['range'] #nome = json['nome'],  fromdate = json['from'], todate = json['to']
+    tipo = json['tipo']
+    range =  (int(float(range))*1000)
+    res = Registrazione.query
+    if tipo is not None :
+        res = res.filter_by(tipo = tipo)
+    if wkbpos is not None and range is not None:
+        res = res.filter(func.ST_Distance_Sphere(Registrazione.pos, wkbpos) < range)
+
+    registrazione = res.all()
+    if len(registrazione)> 1:
+        result = registrazioni_schema.dump(registrazione)
+    else :
+        result = registrazione_schema.dump(registrazione)
+    return jsonify(result.data)
 
 
 if __name__ == '__main__':
