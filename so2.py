@@ -27,7 +27,7 @@ def get_reg_by_user():
 @app.route('/save_reg', methods = ['POST'])
 def save_reg():
     json = request.get_json()
-    registrazione = Registrazione(json['nome'], json['tipo'], json['dettagli'], json['prezzo'], json['point'], json['data'], json['idutente'])
+    registrazione = Registrazione(json['nome'], json['tipo'], json['dettagli'], json['prezzo'], json['pos'], json['data'], json['idutente'])
     registrazione.pos = WKTElement(registrazione.pos, 4326)
     db.session.add(registrazione)
     db.session.commit()
