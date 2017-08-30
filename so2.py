@@ -2,6 +2,7 @@ import datetime
 from flask import jsonify, request
 from models import Registrazione, Utente, app, db, utenti_schema, registrazioni_schema, registrazione_schema, utente_schema
 from geoalchemy2 import *
+from pytz import timezone, utc
 
 @app.route('/users', methods = ['GET'])
 def get_all_users():
@@ -32,12 +33,15 @@ def save_reg():
     date = int(float(json['data']))
     print(date)
     data = datetime.datetime.fromtimestamp(date/1e3)
-    print(data)
+    europe = timezone('Europe/Rome')
+    utctime = utc.localize(data)
+    local_tz = utctime.astimezone(europe)
+    print(local_tz)
     registrazione = Registrazione(json['nome'], json['tipo'], json['dettagli'], json['prezzo'], json['pos'], data, json['idutente'])
     registrazione.pos = WKTElement(registrazione.pos, 4326)
     db.session.add(registrazione)
     db.session.commit()
-    response = jsonify({'message':'Registration successfully saved'})
+    response = jsonify('Registration successfully saved')
     return response
 
 @app.route('/auth_user', methods = ['GET','POST'])
