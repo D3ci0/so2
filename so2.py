@@ -2,7 +2,6 @@ import datetime
 from flask import jsonify, request
 from models import Registrazione, Utente, app, db, utenti_schema, registrazioni_schema, registrazione_schema, utente_schema
 from geoalchemy2 import *
-from pytz import timezone, utc
 
 @app.route('/users', methods = ['GET'])
 def get_all_users():
