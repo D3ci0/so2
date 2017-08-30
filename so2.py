@@ -1,3 +1,4 @@
+import datetime
 from flask import jsonify, request
 from models import Registrazione, Utente, app, db, utenti_schema, registrazioni_schema, registrazione_schema, utente_schema
 from geoalchemy2 import *
@@ -27,7 +28,10 @@ def get_reg_by_user():
 @app.route('/save_reg', methods = ['POST'])
 def save_reg():
     json = request.get_json()
-    registrazione = Registrazione(json['nome'], json['tipo'], json['dettagli'], json['prezzo'], json['pos'], json['data'], json['idutente'])
+    print(json)
+    data = datetime.datetime.fromtimestamp(json['data'])
+    print(data)
+    registrazione = Registrazione(json['nome'], json['tipo'], json['dettagli'], json['prezzo'], json['pos'], data, json['idutente'])
     registrazione.pos = WKTElement(registrazione.pos, 4326)
     db.session.add(registrazione)
     db.session.commit()
