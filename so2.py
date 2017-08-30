@@ -29,7 +29,9 @@ def get_reg_by_user():
 def save_reg():
     json = request.get_json()
     print(json)
-    data = datetime.datetime.fromtimestamp(json['data'])
+    date = int(float(json['data']))
+    print(date)
+    data = datetime.datetime.fromtimestamp(date/1e3)
     print(data)
     registrazione = Registrazione(json['nome'], json['tipo'], json['dettagli'], json['prezzo'], json['pos'], data, json['idutente'])
     registrazione.pos = WKTElement(registrazione.pos, 4326)
