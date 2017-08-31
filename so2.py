@@ -13,17 +13,19 @@ def get_all_users():
 def get_all_registrations():
     registrazioni = Registrazione.query.all()
     result = registrazioni_schema.dump(registrazioni)
+    #TODO gestire registrazioni assenti o uguali ad 1
     return jsonify(result.data)
 
 @app.route('/reg_by_user', methods = ['GET','POST'])
 def get_reg_by_user():
     idutente = request.get_json()
     registrazione = Registrazione.query.filter_by(idutente = idutente)
-    if registrazione.count()>1 :
+    if registrazione.count() > 1:
         result = registrazioni_schema.dump(registrazione)
+        return jsonify(result.data)
     else :
-        result = registrazione_schema.dump(registrazione)
-    return jsonify(result.data)
+        result = registrazione_schema.dump(registrazione.first())
+        return jsonify([result.data])
 
 @app.route('/save_reg', methods = ['POST'])
 def save_reg():
@@ -71,10 +73,10 @@ def search_reg():
         res = res.filter(func.ST_Distance_Sphere(Registrazione.pos, wkbpos) < range)
 
     registrazione = res.all()
-    if len(registrazione)> 1:
+    if len(registrazione) > 1:
         result = registrazioni_schema.dump(registrazione)
     else :
-        result = registrazione_schema.dump(registrazione)
+        result = registrazione_schema.dump(registrazione.first())
     return jsonify(result.data)
 
 
