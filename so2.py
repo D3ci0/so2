@@ -63,20 +63,32 @@ def search_reg():
     json = request.get_json()
     print(json)
     wkbpos = json['pos']
-    range = json['range'] #nome = json['nome'],  fromdate = json['from'], todate = json['to']
+    fromdate = int(float(json['dataDa']))
+    fromdate = datetime.datetime.fromtimestamp(fromdate/1e3)
+    todate = int(float(json['dataA']))
+    todate = datetime.datetime.fromtimestamp(todate/1e3)
     tipo = json['tipo']
-    range =  (int(float(range))*1000)
+    range =  float(json['distanza'])*1000
+    fromprice = float(json['prezzoDa'])
+    toprice = float(json['prezzoA'])
+
+    date = int(float(json['data']))
+    data = datetime.datetime.fromtimestamp(date/1e3)
     res = Registrazione.query
     if tipo is not None :
         res = res.filter_by(tipo = tipo)
     if wkbpos is not None and range is not None:
         res = res.filter(func.ST_Distance_Sphere(Registrazione.pos, wkbpos) < range)
+    if fromprice is not None and toprice is not None:
+        res = res.filter(Registrazione.prezzo.between(fromprice,toprice))
+    if fromdate is not None and todate is not None:
+        res = res.filter(Registrazione.data.between(fromdate,todate))
 
     registrazione = res.all()
     if len(registrazione) > 1:
         result = registrazioni_schema.dump(registrazione)
     else :
-        result = registrazione_schema.dump(registrazione.first())
+        result = registrazione_schema.dump([registrazione.first()])
     return jsonify(result.data)
 
 
