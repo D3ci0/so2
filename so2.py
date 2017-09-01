@@ -62,33 +62,31 @@ def auth_user():
 def search_reg():
     json = request.get_json()
     print(json)
-    wkbpos = json['pos']
-    fromdate = int(float(json['dataDa']))
-    fromdate = datetime.datetime.fromtimestamp(fromdate/1e3)
-    todate = int(float(json['dataA']))
-    todate = datetime.datetime.fromtimestamp(todate/1e3)
-    tipo = json['tipo']
-    range =  float(json['distanza'])*1000
-    fromprice = float(json['prezzoDa'])
-    toprice = float(json['prezzoA'])
-
-    date = int(float(json['data']))
-    data = datetime.datetime.fromtimestamp(date/1e3)
     res = Registrazione.query
-    if tipo is not None :
-        res = res.filter_by(tipo = tipo)
-    if wkbpos is not None and range is not None:
-        res = res.filter(func.ST_Distance_Sphere(Registrazione.pos, wkbpos) < range)
-    if fromprice is not None and toprice is not None:
-        res = res.filter(Registrazione.prezzo.between(fromprice,toprice))
-    if fromdate is not None and todate is not None:
+    wkbpos = json['pos']
+    if json['dataDa'] is not None and json['dataA'] is not None:
+        fromdate = int(float(json['dataDa']))
+        fromdate = datetime.datetime.fromtimestamp(fromdate/1e3)
+        todate = int(float(json['dataA']))
+        todate = datetime.datetime.fromtimestamp(todate/1e3)
         res = res.filter(Registrazione.data.between(fromdate,todate))
 
+    if json['distanza'] is not None and wkbpos is not None:
+        range =  float(json['distanza'])*1000
+        res = res.filter(func.ST_Distance_Sphere(Registrazione.pos, wkbpos) < range)
+
+    if json['prezzoDa'] is not None and json['prezzoA'] is not None:
+        fromprice = float(json['prezzoDa'])
+        toprice = float(json['prezzoA'])
+        res = res.filter(Registrazione.prezzo.between(fromprice,toprice))
+
+    tipo = json['tipo']
+    if tipo is not None :
+        res = res.filter_by(tipo = tipo)
+
     registrazione = res.all()
-    if len(registrazione) > 1:
-        result = registrazioni_schema.dump(registrazione)
-    else :
-        result = registrazione_schema.dump([registrazione.first()])
+    print(len(registrazione))
+    result = registrazioni_schema.dump(registrazione)
     return jsonify(result.data)
 
 
