@@ -9,13 +9,6 @@ def get_all_users():
     result = utenti_schema.dump(utenti)
     return jsonify( result.data)
 
-@app.route('/registrations', methods = ['GET'])
-def get_all_registrations():
-    registrazioni = Registrazione.query.all()
-    result = registrazioni_schema.dump(registrazioni)
-    #TODO gestire registrazioni assenti o uguali ad 1
-    return jsonify(result.data)
-
 @app.route('/reg_by_user', methods = ['GET','POST'])
 def get_reg_by_user():
     idutente = request.get_json()
@@ -30,7 +23,6 @@ def get_reg_by_user():
 @app.route('/save_reg', methods = ['POST'])
 def save_reg():
     json = request.get_json()
-    print(json)
     date = int(float(json['data']))
     data = datetime.datetime.fromtimestamp(date/1e3)
     registrazione = Registrazione(json['nome'], json['tipo'], json['dettagli'], json['prezzo'], json['pos'], data, json['idutente'])
@@ -72,7 +64,7 @@ def search_reg():
         res = res.filter(Registrazione.data.between(fromdate,todate))
 
     if json['distanza'] is not None and wkbpos is not None:
-        range =  float(json['distanza'])*1000
+        range = float(json['distanza'])*1000
         res = res.filter(func.ST_Distance_Sphere(Registrazione.pos, wkbpos) < range)
 
     if json['prezzoDa'] is not None and json['prezzoA'] is not None:
@@ -85,7 +77,6 @@ def search_reg():
         res = res.filter_by(tipo = tipo)
 
     registrazione = res.all()
-    print(len(registrazione))
     result = registrazioni_schema.dump(registrazione)
     return jsonify(result.data)
 
