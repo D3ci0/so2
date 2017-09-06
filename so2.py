@@ -53,9 +53,11 @@ def auth_user():
 @app.route('/search_reg', methods = ['GET','POST'])
 def search_reg():
     json = request.get_json()
-    print(json)
     res = Registrazione.query
-    wkbpos = json['pos']
+
+    idutente = json['idutente']
+    res = res.filter(Registrazione.idutente != idutente)
+
     if json['dataDa'] is not None and json['dataA'] is not None:
         fromdate = int(float(json['dataDa']))
         fromdate = datetime.datetime.fromtimestamp(fromdate/1e3)
@@ -63,6 +65,7 @@ def search_reg():
         todate = datetime.datetime.fromtimestamp(todate/1e3)
         res = res.filter(Registrazione.data.between(fromdate,todate))
 
+    wkbpos = json['pos']
     if json['distanza'] is not None and wkbpos is not None:
         range = float(json['distanza'])*1000
         res = res.filter(func.ST_Distance_Sphere(Registrazione.pos, wkbpos) < range)
