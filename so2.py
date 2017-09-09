@@ -96,7 +96,7 @@ def delete_reg():
 @app.route('/update_reg', methods = ['GET','POST'])
 def update_reg():
     json = request.get_json()
-    updated_reg = { 'nome' : json['nome'], 'tipo' : json['tipo'], 'dettagli' : json['dettagli'], 'prezzo' : json['prezzo'], 'pos' : json['pos']}
+    updated_reg = { 'nome' : json['nome'], 'tipo' : json['tipo'], 'dettagli' : json['dettagli'], 'prezzo' : json['prezzo'], 'pos' : WKTElement(json['pos'], 4326)}
     Registrazione.query.filter(Registrazione.idreg == json['idreg']).update(updated_reg)
     db.session.commit()
     response = jsonify('Registration successfully updated')
