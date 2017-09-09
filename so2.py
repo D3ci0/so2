@@ -83,6 +83,24 @@ def search_reg():
     result = registrazioni_schema.dump(registrazione)
     return jsonify(result.data)
 
+@app.route('/delete_reg', methods = ['GET', 'POST'])
+def delete_reg():
+    json = request.get_json()
+    idreg_to_delete = json['idreg']
+    Registrazione.query.filter(Registrazione.idreg == idreg_to_delete).delete()
+    db.session.commit()
+    response = jsonify('Registration successfully deleted')
+    return response
+
+
+@app.route('/update_reg', methods = ['GET','POST'])
+def update_reg():
+    json = request.get_json()
+    updated_reg = { 'nome' : json['nome'], 'tipo' : json['tipo'], 'dettagli' : json['dettagli'], 'prezzo' : json['prezzo'], 'pos' : json['pos']}
+    Registrazione.query.filter(Registrazione.idreg == json['idreg']).update(updated_reg)
+    db.session.commit()
+    response = jsonify('Registration successfully updated')
+    return response
 
 if __name__ == '__main__':
         app.run()
