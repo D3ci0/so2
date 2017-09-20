@@ -18,7 +18,6 @@ class Registrazione(db.Model):
     dettagli = db.Column(db.Text)
     prezzo = db.Column(db.Float)
     pos = db.Column(Geometry(geometry_type='POINT', srid=4326))
-    # foto(controllare conversione bytea)
     data = db.Column(db.DateTime)
     idutente = db.Column(db.Integer, db.ForeignKey('utenti.idutente'))
     utente = db.relationship("Utente", back_populates = "idreg", lazy='joined')
