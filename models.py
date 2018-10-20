@@ -5,7 +5,7 @@ from geoalchemy2 import Geometry
 
 app = Flask(__name__)
 app.config[
-    "SQLALCHEMY_DATABASE_URI"] = 'postgres://gyntkdkmnhdzjo:18e245b001185b2f9ed58193f7f0e68b2e26276c21d60bd90c3e6c896b22a1f4@ec2-107-20-186-238.compute-1.amazonaws.com:5432/d356a3m6qd1phc'
+    "SQLALCHEMY_DATABASE_URI"] = ''
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 
